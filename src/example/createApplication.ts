@@ -1,6 +1,6 @@
-import { createHandler, createServer } from 'sierra';
+import { createHandler, createServer, HandlerContext } from 'sierra';
 
-import { CreateRoutes, HandlerContext } from '../endpoint';
+import { CreateRoutes } from '../endpoint';
 import { RouteMiddleware } from '../RouteMiddleware';
 
 export interface SessionContext {

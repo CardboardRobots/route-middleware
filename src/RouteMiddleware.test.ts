@@ -1,9 +1,9 @@
 import request from 'supertest';
-import { createHandler, createServer, Verb } from 'sierra';
+import { createHandler, createServer, HandlerContext, Verb } from 'sierra';
 import { Route } from '@cardboardrobots/route';
 
 import { RouteMiddleware } from './RouteMiddleware';
-import { Endpoint, HandlerContext } from './endpoint';
+import { Endpoint } from './endpoint';
 
 describe('RouteMiddleware', function () {
     it('should route', async function () {
