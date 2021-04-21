@@ -3,8 +3,7 @@ import { createHandler, createServer, Verb } from 'sierra';
 import { Route } from '@cardboardrobots/route';
 
 import { RouteMiddleware } from './RouteMiddleware';
-import { Endpoint } from './endpoint';
-import { HandlerContext } from './example/HandlerTypes';
+import { Endpoint, HandlerContext } from './endpoint';
 
 describe('RouteMiddleware', function () {
     it('should route', async function () {

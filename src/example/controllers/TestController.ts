@@ -2,10 +2,10 @@ import { Verb } from 'sierra';
 
 import { AddRoute } from '../createApplication';
 
+const TEST_CONTROLLER = 'test';
 export const addRoute: AddRoute = (create) => {
-    const createEndpoint = create();
     return [
-        createEndpoint(
+        create(
             Verb.Get,
             () => '/',
             () => ({})
@@ -14,9 +14,9 @@ export const addRoute: AddRoute = (create) => {
             const { user } = session;
             return { user };
         }),
-        createEndpoint(
+        create(
             Verb.Get,
-            (id) => `/test/${id}`,
+            (id) => `/${TEST_CONTROLLER}/${id}`,
             (id) => ({ id })
         ).use(async ({ data }) => {
             const { params, session } = data;
@@ -24,11 +24,12 @@ export const addRoute: AddRoute = (create) => {
             const { id } = params;
             return { user, id };
         }),
-        createEndpoint(
+        create(
             Verb.Get,
-            (name) => `/name/${name}`,
-            (name) => ({ name })
+            (id) => `/${TEST_CONTROLLER}/edit/${id}`,
+            (id) => ({ id })
         ).use(async ({ data }, { name }) => {
+            // TODO: Fix value params
             const { session } = data;
             const { user } = session;
             return { user, name };
