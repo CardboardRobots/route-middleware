@@ -12,7 +12,7 @@ describe('RouteMiddleware', function () {
 
         const middleware = new RouteMiddleware<HandlerContext<typeof handler>>();
         middleware.endpoints.push(
-            new Endpoint([Verb.Get], new Route(() => '/test'), async () => {
+            new Endpoint([Verb.Get], new Route(() => '/test')).use(async () => {
                 return {};
             })
         );

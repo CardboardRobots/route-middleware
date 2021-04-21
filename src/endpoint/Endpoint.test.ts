@@ -10,9 +10,8 @@ describe('Endpoint', function () {
             new Route(
                 (id) => `test/${id}`,
                 (id) => ({ id })
-            ),
-            async () => {}
-        );
+            )
+        ).use(async () => {});
         const result = endpoint.match(Verb.Get, 'test/1');
         expect(result).toStrictEqual({ id: '1' });
     });

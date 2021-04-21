@@ -1,35 +1,37 @@
-import { AddRoute } from '../createApplication';
-import { Create } from '../../endpoint';
+import { Verb } from 'sierra';
 
-export const addRoute: AddRoute = () => {
+import { AddRoute } from '../createApplication';
+
+export const addRoute: AddRoute = (create) => {
+    const createEndpoint = create();
     return [
-        Create.get(
+        createEndpoint(
+            Verb.Get,
             () => '/',
-            () => ({}),
-            async ({ data }) => {
-                const { session } = data;
-                const { user } = session;
-                return { user };
-            }
-        ),
-        Create.get(
+            () => ({})
+        ).use(async ({ data }) => {
+            const { session } = data;
+            const { user } = session;
+            return { user };
+        }),
+        createEndpoint(
+            Verb.Get,
             (id) => `/test/${id}`,
-            (id) => ({ id }),
-            async ({ data }) => {
-                const { params, session } = data;
-                const { user } = session;
-                const { id } = params;
-                return { user, id };
-            }
-        ),
-        Create.get(
+            (id) => ({ id })
+        ).use(async ({ data }) => {
+            const { params, session } = data;
+            const { user } = session;
+            const { id } = params;
+            return { user, id };
+        }),
+        createEndpoint(
+            Verb.Get,
             (name) => `/name/${name}`,
-            (name) => ({ name }),
-            async ({ data }, { name }) => {
-                const { session } = data;
-                const { user } = session;
-                return { user, name };
-            }
-        ),
+            (name) => ({ name })
+        ).use(async ({ data }, { name }) => {
+            const { session } = data;
+            const { user } = session;
+            return { user, name };
+        }),
     ];
 };

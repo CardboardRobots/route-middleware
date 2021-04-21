@@ -4,10 +4,6 @@ import { Context, Verb } from 'sierra';
 
 type RouteReturn<T> = T extends Route<any, infer U> ? ReturnType<U> : never;
 
-export interface EndpointCallback<CONTEXT extends Context, ROUTE extends Route<any, any>, RESULT> {
-    (context: CONTEXT & Context<{ params: RouteReturn<ROUTE> }>, match: RouteReturn<ROUTE>): Promise<RESULT>;
-}
-
 export class Endpoint<
     CONTEXT extends Context,
     ROUTE extends Route<any, any>,
@@ -24,12 +20,9 @@ export class Endpoint<
         RESULT
     > = new Pipeline();
 
-    callback: EndpointCallback<CONTEXT, ROUTE, RESULT>;
-
-    constructor(methods: Verb[], route: ROUTE, callback: EndpointCallback<CONTEXT, ROUTE, RESULT>) {
+    constructor(methods: Verb[], route: ROUTE) {
         this.methods = methods;
         this.route = route;
-        this.callback = callback;
     }
 
     match(method: Verb, pathname: string) {
@@ -70,7 +63,7 @@ export class Endpoint<
         MiddlewareReturn<MIDDLEWARE>
     >;
 
-    use(middleware: Middleware<any, any, any>): any {
+    use(middleware: Middleware<any, any, any>): this {
         this.pipeline.use(middleware);
         return this;
     }

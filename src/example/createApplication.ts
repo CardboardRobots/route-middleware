@@ -1,4 +1,5 @@
-import { createHandler, createServer } from 'sierra';
+import { ParseFunction, Route, RouteFunction } from '@cardboardrobots/route';
+import { Context, createHandler, createServer, Verb } from 'sierra';
 
 import { Endpoint } from '../endpoint';
 import { RouteMiddleware } from '../RouteMiddleware';
@@ -34,5 +35,35 @@ export function createApplication() {
 type ApplicationContext = HandlerContext<ReturnType<typeof createApplication>['handler']>;
 
 export interface AddRoute {
-    (): Endpoint<ApplicationContext, any, any, any, any>[];
+    (create: CreateFunction<ApplicationContext>): Endpoint<ApplicationContext, any, any, any, any>[];
+}
+
+interface CreateFunction<CONTEXT extends Context> {
+    (): <T extends RouteFunction, U extends ParseFunction<T, any>, RESULT>(
+        method: Verb,
+        route: T,
+        parser: U
+    ) => Endpoint<
+        CONTEXT,
+        Route<T, U>,
+        CONTEXT & Context<{ params: ReturnType<U> }>,
+        CONTEXT & Context<{ params: ReturnType<U> }>,
+        RESULT
+    >;
+}
+
+export function create<CONTEXT extends Context>() {
+    return function createEndpoint<T extends RouteFunction, U extends ParseFunction<T, any>, RESULT>(
+        method: Verb,
+        route: T,
+        parser: U
+    ) {
+        return new Endpoint<
+            CONTEXT,
+            Route<T, U>,
+            CONTEXT & Context<{ params: ReturnType<U> }>,
+            CONTEXT & Context<{ params: ReturnType<U> }>,
+            RESULT
+        >([method], new Route(route, parser));
+    };
 }
