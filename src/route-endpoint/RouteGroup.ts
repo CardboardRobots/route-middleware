@@ -3,11 +3,11 @@ import * as path from 'path';
 import { Middleware } from '@cardboardrobots/pipeline';
 import { Context, Verb } from 'sierra';
 
-import { Endpoint } from './Endpoint';
+import { RouteEndpoint } from './RouteEndpoint';
 
 export class RouteGroup {
     base: string;
-    endpoints: Endpoint<any, any, any>[] = [];
+    endpoints: RouteEndpoint<any, any, any>[] = [];
     routeGroups: RouteGroup[] = [];
 
     constructor(base = '') {
@@ -19,26 +19,26 @@ export class RouteGroup {
         verbs: Verb | Verb[],
         name: string | RegExp,
         method: Middleware<Context, any, any>
-    ): Endpoint<any, any, any>;
+    ): RouteEndpoint<any, any, any>;
 
     endpoint(
         verbs: Verb | Verb[],
         name: string | RegExp,
         middleware: Middleware<Context, any, any>[],
         method: Middleware<Context, any, any>
-    ): Endpoint<any, any, any>;
+    ): RouteEndpoint<any, any, any>;
 
     endpoint(verbs: Verb | Verb[], name: string | RegExp, paramA: any, paramB?: any) {
-        const route = new Endpoint(verbs, name, paramA, paramB);
+        const route = new RouteEndpoint(verbs, name, paramA, paramB);
         this.endpoints.push(route);
         return route;
     }
 
-    add(endpoint: Endpoint<any, any, any>) {
+    add(endpoint: RouteEndpoint<any, any, any>) {
         this.endpoints.push(endpoint);
     }
 
-    remove(endpoint: Endpoint<any, any, any>) {
+    remove(endpoint: RouteEndpoint<any, any, any>) {
         const index = this.endpoints.indexOf(endpoint);
         if (index >= 0) {
             return Boolean(this.endpoints.splice(index, 1).length);
@@ -71,7 +71,7 @@ export class RouteGroup {
 
     init(parentBase = '/') {
         const base = path.posix.join(parentBase, this.base);
-        const routes: Endpoint<any, any, any>[] = [];
+        const routes: RouteEndpoint<any, any, any>[] = [];
         for (const route of this.endpoints) {
             route.init(base);
             routes.push(route);

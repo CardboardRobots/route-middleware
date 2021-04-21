@@ -1,13 +1,13 @@
 import { Verb } from 'sierra';
 
-import { Endpoint } from './Endpoint';
+import { RouteEndpoint } from './RouteEndpoint';
 import { RouteGroup } from './RouteGroup';
 
 describe('RouteGroup', function () {
     describe('add', function () {
         it('should add a Route', function () {
             const routerMiddleware = new RouteGroup();
-            const route = new Endpoint(Verb.Get, 'test', async () => {});
+            const route = new RouteEndpoint(Verb.Get, 'test', async () => {});
             routerMiddleware.add(route);
             expect(routerMiddleware.endpoints).toContain(route);
         });
@@ -16,7 +16,7 @@ describe('RouteGroup', function () {
     describe('remove', function () {
         it('should remove a Route', function () {
             const routerMiddleware = new RouteGroup();
-            const route = new Endpoint(Verb.Get, 'test', async () => {});
+            const route = new RouteEndpoint(Verb.Get, 'test', async () => {});
             routerMiddleware.add(route);
             routerMiddleware.remove(route);
             expect(routerMiddleware.endpoints).not.toContain(route);

@@ -2,16 +2,16 @@ import { Context, Verb } from 'sierra';
 
 import { createRequest } from '../utils/test';
 
-import { Endpoint } from './Endpoint';
+import { RouteEndpoint } from './RouteEndpoint';
 import { RouteMiddleware, sortRoutes } from './RouteMiddleware';
 
 describe('RouteMiddleware', function () {
     describe('init', function () {
         it('should sort Routes', function () {
             const routerMiddleware = new RouteMiddleware();
-            const routeA = new Endpoint(Verb.Get, 'a', async () => {});
-            const routeB = new Endpoint(Verb.Get, 'a/:b', async () => {});
-            const routeRegex = new Endpoint(Verb.Get, /regex/, async () => {});
+            const routeA = new RouteEndpoint(Verb.Get, 'a', async () => {});
+            const routeB = new RouteEndpoint(Verb.Get, 'a/:b', async () => {});
+            const routeRegex = new RouteEndpoint(Verb.Get, /regex/, async () => {});
             routerMiddleware.add(routeB);
             routerMiddleware.add(routeA);
             routerMiddleware.add(routeRegex);
@@ -29,7 +29,7 @@ describe('RouteMiddleware', function () {
     describe('handle', function () {
         it('should match routes', async function () {
             const routerMiddleware = new RouteMiddleware();
-            const route = new Endpoint(Verb.Get, 'test', async () => {
+            const route = new RouteEndpoint(Verb.Get, 'test', async () => {
                 return true;
             });
             routerMiddleware.add(route);
@@ -51,12 +51,16 @@ describe('RouteMiddleware', function () {
 
         it('should match parameterized routes', async function () {
             const routerMiddleware = new RouteMiddleware();
-            const testRoute = new Endpoint(Verb.Get, 'test', async () => {
+            const testRoute = new RouteEndpoint(Verb.Get, 'test', async () => {
                 return true;
             });
-            const paramRoute = new Endpoint<any, any, { param: any }>(Verb.Get, 'test/:param', async ({ data }) => {
-                return data.params?.param;
-            });
+            const paramRoute = new RouteEndpoint<any, any, { param: any }>(
+                Verb.Get,
+                'test/:param',
+                async ({ data }) => {
+                    return data.params?.param;
+                }
+            );
             routerMiddleware.add(testRoute);
             routerMiddleware.add(paramRoute);
             routerMiddleware.init();
@@ -93,7 +97,7 @@ describe('sortRoutes', function () {
         ];
 
         const routes = routesPaths.map((routePath) => {
-            return new Endpoint([Verb.Get], routePath, async () => {});
+            return new RouteEndpoint([Verb.Get], routePath, async () => {});
         });
         routes.sort(sortRoutes);
 
