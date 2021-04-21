@@ -1,3 +1,4 @@
+import { Pipeline } from '@cardboardrobots/pipeline';
 import { Route } from '@cardboardrobots/route';
 import { Context, Verb } from 'sierra';
 
@@ -7,9 +8,21 @@ export interface EndpointCallback<CONTEXT extends Context, ROUTE extends Route<a
     (context: CONTEXT & Context<{ params: RouteReturn<ROUTE> }>, match: RouteReturn<ROUTE>): Promise<RESULT>;
 }
 
-export class Endpoint<CONTEXT extends Context, ROUTE extends Route<any, any>, RESULT> {
+export class Endpoint<
+    CONTEXT extends Context,
+    ROUTE extends Route<any, any>,
+    NEXTCONTEXT extends CONTEXT & Context<{ params: RouteReturn<ROUTE> }>,
+    RESULT
+> {
     methods: Verb[];
     route: ROUTE;
+    pipeline: Pipeline<
+        CONTEXT & Context<{ params: RouteReturn<ROUTE> }>,
+        RouteReturn<ROUTE>,
+        NEXTCONTEXT,
+        RESULT
+    > = new Pipeline();
+
     callback: EndpointCallback<CONTEXT, ROUTE, RESULT>;
 
     constructor(methods: Verb[], route: ROUTE, callback: EndpointCallback<CONTEXT, ROUTE, RESULT>) {
