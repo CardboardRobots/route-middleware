@@ -15,10 +15,20 @@ export const addRoute: AddRoute = () => {
         Create.get(
             (id) => `/test/${id}`,
             (id) => ({ id }),
-            async ({ data }, { id }) => {
+            async ({ data }) => {
+                const { params, session } = data;
+                const { user } = session;
+                const { id } = params;
+                return { user, id };
+            }
+        ),
+        Create.get(
+            (name) => `/name/${name}`,
+            (name) => ({ name }),
+            async ({ data }, { name }) => {
                 const { session } = data;
                 const { user } = session;
-                return { user, id };
+                return { user, name };
             }
         ),
     ];
