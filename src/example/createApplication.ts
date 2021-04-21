@@ -34,5 +34,5 @@ export function createApplication() {
 type ApplicationContext = HandlerContext<ReturnType<typeof createApplication>['handler']>;
 
 export interface AddRoute {
-    (): Endpoint<any, ApplicationContext, any>[];
+    (): Endpoint<ApplicationContext, any, any>[];
 }

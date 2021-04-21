@@ -1,7 +1,7 @@
 import { Route } from '@cardboardrobots/route';
 import { Context, Verb } from 'sierra';
 
-export class Endpoint<ROUTE extends Route<any, any>, CONTEXT extends Context, RESULT> {
+export class Endpoint<CONTEXT extends Context, ROUTE extends Route<any, any>, RESULT> {
     methods: Verb[];
     route: ROUTE;
     callback: (context: CONTEXT, match: Record<string, unknown>) => Promise<RESULT>;

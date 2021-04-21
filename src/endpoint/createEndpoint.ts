@@ -1,61 +1,69 @@
-import { Route, RouteFunction } from '@cardboardrobots/route';
+import { ParseFunction, Route, RouteFunction } from '@cardboardrobots/route';
 import { Context, Verb } from 'sierra';
 
 import { Endpoint } from './Endpoint';
 
-export function createEndpoint<T extends RouteFunction, CONTEXT extends Context, RESULT>(
-    method: Verb,
-    route: T,
-    callback: (context: CONTEXT, match: Record<string, unknown>) => Promise<RESULT>
-) {
-    return new Endpoint([method], new Route(route), callback);
+export function createEndpoint<
+    CONTEXT extends Context,
+    T extends RouteFunction,
+    U extends ParseFunction<T, any>,
+    RESULT
+>(method: Verb, route: T, parser: U, callback: (context: CONTEXT, match: Record<string, unknown>) => Promise<RESULT>) {
+    return new Endpoint([method], new Route(route, parser), callback);
 }
 
-export function get<T extends RouteFunction, CONTEXT extends Context, RESULT>(
+export function get<CONTEXT extends Context, T extends RouteFunction, U extends ParseFunction<T, any>, RESULT>(
     route: T,
+    parser: U,
     callback: (context: CONTEXT, match: Record<string, unknown>) => Promise<RESULT>
 ) {
-    return createEndpoint(Verb.Get, route, callback);
+    return createEndpoint(Verb.Get, route, parser, callback);
 }
 
-export function post<T extends RouteFunction, CONTEXT extends Context, RESULT>(
+export function post<CONTEXT extends Context, T extends RouteFunction, U extends ParseFunction<T, any>, RESULT>(
     route: T,
+    parser: U,
     callback: (context: CONTEXT, match: Record<string, unknown>) => Promise<RESULT>
 ) {
-    return createEndpoint(Verb.Post, route, callback);
+    return createEndpoint(Verb.Post, route, parser, callback);
 }
 
-export function put<T extends RouteFunction, CONTEXT extends Context, RESULT>(
+export function put<CONTEXT extends Context, T extends RouteFunction, U extends ParseFunction<T, any>, RESULT>(
     route: T,
+    parser: U,
     callback: (context: CONTEXT, match: Record<string, unknown>) => Promise<RESULT>
 ) {
-    return createEndpoint(Verb.Put, route, callback);
+    return createEndpoint(Verb.Put, route, parser, callback);
 }
 
-export function patch<T extends RouteFunction, CONTEXT extends Context, RESULT>(
+export function patch<CONTEXT extends Context, T extends RouteFunction, U extends ParseFunction<T, any>, RESULT>(
     route: T,
+    parser: U,
     callback: (context: CONTEXT, match: Record<string, unknown>) => Promise<RESULT>
 ) {
-    return createEndpoint(Verb.Patch, route, callback);
+    return createEndpoint(Verb.Patch, route, parser, callback);
 }
 
-export function del<T extends RouteFunction, CONTEXT extends Context, RESULT>(
+export function del<CONTEXT extends Context, T extends RouteFunction, U extends ParseFunction<T, any>, RESULT>(
     route: T,
+    parser: U,
     callback: (context: CONTEXT, match: Record<string, unknown>) => Promise<RESULT>
 ) {
-    return createEndpoint(Verb.Delete, route, callback);
+    return createEndpoint(Verb.Delete, route, parser, callback);
 }
 
-export function options<T extends RouteFunction, CONTEXT extends Context, RESULT>(
+export function options<CONTEXT extends Context, T extends RouteFunction, U extends ParseFunction<T, any>, RESULT>(
     route: T,
+    parser: U,
     callback: (context: CONTEXT, match: Record<string, unknown>) => Promise<RESULT>
 ) {
-    return createEndpoint(Verb.Options, route, callback);
+    return createEndpoint(Verb.Options, route, parser, callback);
 }
 
-export function head<T extends RouteFunction, CONTEXT extends Context, RESULT>(
+export function head<CONTEXT extends Context, T extends RouteFunction, U extends ParseFunction<T, any>, RESULT>(
     route: T,
+    parser: U,
     callback: (context: CONTEXT, match: Record<string, unknown>) => Promise<RESULT>
 ) {
-    return createEndpoint(Verb.Head, route, callback);
+    return createEndpoint(Verb.Head, route, parser, callback);
 }

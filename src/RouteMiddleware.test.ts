@@ -20,7 +20,7 @@ describe('RouteMiddleware', function () {
 
         const server = createServer(routeHandler);
 
-        const { body } = await request(server).get('/').expect(200);
+        const { body } = await request(server).get('/test').expect(200);
         expect(body).toStrictEqual({});
     });
 });

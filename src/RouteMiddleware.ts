@@ -5,7 +5,7 @@ import { Context, NotFoundError } from 'sierra';
 import { Endpoint } from './endpoint';
 
 export class RouteMiddleware<CONTEXT extends Context> {
-    endpoints: Endpoint<any, CONTEXT, any>[] = [];
+    endpoints: Endpoint<CONTEXT, any, any>[] = [];
 
     callback = (context: CONTEXT) => {
         const result = this.match(context);
@@ -30,7 +30,7 @@ export class RouteMiddleware<CONTEXT extends Context> {
         return undefined;
     }
 
-    add(...endpoints: Endpoint<any, CONTEXT, any>[]) {
+    add(...endpoints: Endpoint<CONTEXT, any, any>[]) {
         this.endpoints = [...this.endpoints, ...endpoints];
     }
 }
