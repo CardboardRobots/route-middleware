@@ -1,4 +1,4 @@
-import { Pipeline } from '@cardboardrobots/pipeline';
+import { Middleware, MiddlewareContext, MiddlewareReturn, Pipeline } from '@cardboardrobots/pipeline';
 import { Route } from '@cardboardrobots/route';
 import { Context, Verb } from 'sierra';
 
@@ -11,7 +11,8 @@ export interface EndpointCallback<CONTEXT extends Context, ROUTE extends Route<a
 export class Endpoint<
     CONTEXT extends Context,
     ROUTE extends Route<any, any>,
-    NEXTCONTEXT extends CONTEXT & Context<{ params: RouteReturn<ROUTE> }>,
+    PARAMSCONTEXT extends CONTEXT & Context<{ params: RouteReturn<ROUTE> }>,
+    NEXTCONTEXT extends PARAMSCONTEXT,
     RESULT
 > {
     methods: Verb[];
@@ -52,5 +53,25 @@ export class Endpoint<
         const nextContext: CONTEXT & Context<{ params: RouteReturn<ROUTE> }> = context as any;
         nextContext.data.params = match;
         return this.pipeline.run(nextContext, match);
+    }
+
+    use(middleware: Middleware<NEXTCONTEXT, RESULT, RESULT>): this;
+    use<NEWDATA extends Record<string, any>, NEWRESULT = RESULT>(
+        middleware: Middleware<NEXTCONTEXT & Context<Partial<NEWDATA>>, RESULT, NEWRESULT>
+    ): Endpoint<CONTEXT, ROUTE, PARAMSCONTEXT, NEXTCONTEXT & Context<NEWDATA>, NEWRESULT>;
+
+    use<MIDDLEWARE extends Middleware<any, any, any>>(
+        middleware: MIDDLEWARE
+    ): Endpoint<
+        CONTEXT,
+        ROUTE,
+        PARAMSCONTEXT,
+        NEXTCONTEXT & MiddlewareContext<MIDDLEWARE>,
+        MiddlewareReturn<MIDDLEWARE>
+    >;
+
+    use(middleware: Middleware<any, any, any>): any {
+        this.pipeline.use(middleware);
+        return this;
     }
 }
