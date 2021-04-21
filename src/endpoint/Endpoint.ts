@@ -51,6 +51,6 @@ export class Endpoint<
     run(context: CONTEXT, match: RouteReturn<ROUTE>) {
         const nextContext: CONTEXT & Context<{ params: RouteReturn<ROUTE> }> = context as any;
         nextContext.data.params = match;
-        return this.callback(nextContext, match);
+        return this.pipeline.run(nextContext, match);
     }
 }
