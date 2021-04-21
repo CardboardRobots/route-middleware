@@ -1,15 +1,17 @@
 import { Route } from '@cardboardrobots/route';
 import { Context, Verb } from 'sierra';
 
+type RouteReturn<T> = T extends Route<any, infer U> ? U : never;
+
 export class Endpoint<CONTEXT extends Context, ROUTE extends Route<any, any>, RESULT> {
     methods: Verb[];
     route: ROUTE;
-    callback: (context: CONTEXT, match: Record<string, unknown>) => Promise<RESULT>;
+    callback: (context: CONTEXT, match: RouteReturn<ROUTE>) => Promise<RESULT>;
 
     constructor(
         methods: Verb[],
         route: ROUTE,
-        callback: (context: CONTEXT, match: Record<string, unknown>) => Promise<RESULT>
+        callback: (context: CONTEXT, match: RouteReturn<ROUTE>) => Promise<RESULT>
     ) {
         this.methods = methods;
         this.route = route;
@@ -24,7 +26,7 @@ export class Endpoint<CONTEXT extends Context, ROUTE extends Route<any, any>, RE
         }
     }
 
-    createObject(array: ReturnType<this['route']['match']>) {
+    createObject(array: RouteReturn<ROUTE>) {
         const output: Record<string, string> = {};
         this.route.names.reduce((output, name, index) => {
             output[name] = array[index];
@@ -33,7 +35,7 @@ export class Endpoint<CONTEXT extends Context, ROUTE extends Route<any, any>, RE
         return output;
     }
 
-    run(context: CONTEXT, match: Record<string, unknown>) {
+    run(context: CONTEXT, match: RouteReturn<ROUTE>) {
         return this.callback(context, match);
     }
 }
