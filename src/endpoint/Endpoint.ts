@@ -25,7 +25,7 @@ export class Endpoint<
         this.route = route;
     }
 
-    match(method: Verb, pathname: string) {
+    match(method: Verb, pathname: string): RouteReturn<ROUTE> | undefined {
         if (this.methods.includes(method)) {
             return this.route.match(pathname);
         } else {
@@ -33,14 +33,14 @@ export class Endpoint<
         }
     }
 
-    createObject(array: RouteReturn<ROUTE>) {
-        const output: Record<string, string> = {};
-        this.route.names.reduce((output, name, index) => {
-            output[name] = array[index];
-            return output;
-        }, output);
-        return output;
-    }
+    // createObject(array: RouteReturn<ROUTE>) {
+    //     const output: Record<string, string> = {};
+    //     this.route.names.reduce((output, name, index) => {
+    //         output[name] = array[index];
+    //         return output;
+    //     }, output);
+    //     return output;
+    // }
 
     run(context: CONTEXT, match: RouteReturn<ROUTE>) {
         const nextContext: CONTEXT & Context<{ params: RouteReturn<ROUTE> }> = context as any;
