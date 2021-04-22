@@ -12,6 +12,7 @@ export interface DatabaseContext {
 }
 
 export function createApplication() {
+    // Create baseHandler
     const baseHandler = createHandler()
         .use<SessionContext, void>(async ({ data }) => {
             data.session = { user: 'name' };
@@ -19,9 +20,17 @@ export function createApplication() {
         .use<DatabaseContext>(async ({ data }) => {
             data.db = { connectionString: 'database' };
         });
-    const router = new RouteMiddleware<HandlerContext<typeof baseHandler>>();
+    type BaseContext = HandlerContext<typeof baseHandler>;
+
+    // Create router
+    const router = new RouteMiddleware<BaseContext>();
+
+    // Create handler
     const handler = baseHandler.use(router.callback);
+
+    // Create server
     const server = createServer(handler);
+
     return {
         handler,
         router,
@@ -29,6 +38,6 @@ export function createApplication() {
     };
 }
 
-type ApplicationContext = HandlerContext<ReturnType<typeof createApplication>['handler']>;
+export type ApplicationContext = HandlerContext<ReturnType<typeof createApplication>['handler']>;
 
-export interface AddRoute extends CreateRoutes<ApplicationContext> {}
+export interface CreateController extends CreateRoutes<ApplicationContext> {}

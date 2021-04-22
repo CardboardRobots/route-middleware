@@ -1,9 +1,10 @@
 import { Verb } from 'sierra';
 
-import { AddRoute } from '../createApplication';
+import { CreateController } from '../createApplication';
 
 const TEST_CONTROLLER = 'test';
-export const addRoute: AddRoute = (create) => {
+
+export const TestController: CreateController = (create) => {
     return [
         create(
             Verb.Get,

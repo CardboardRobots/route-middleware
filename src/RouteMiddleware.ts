@@ -4,7 +4,8 @@ import { Context, NotFoundError } from 'sierra';
 
 import { Endpoint } from './endpoint';
 
-export class RouteMiddleware<CONTEXT extends Context> {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export class RouteMiddleware<CONTEXT extends Context = Context<{}>> {
     endpoints: Endpoint<CONTEXT, any, any, any, any>[] = [];
 
     callback = (context: CONTEXT) => {
