@@ -1,13 +1,10 @@
-import { Verb } from 'sierra';
+import { Controller } from '../createApplication';
 
-import { CreateController } from '../createApplication';
+const TEST = 'test';
 
-const TEST_CONTROLLER = 'test';
-
-export const TestController: CreateController = (create) => {
+export const TestController: Controller = ({ get }) => {
     return [
-        create(
-            Verb.Get,
+        get(
             () => '/',
             () => ({})
         ).use(async ({ data }) => {
@@ -16,9 +13,8 @@ export const TestController: CreateController = (create) => {
             return { user };
         }),
 
-        create(
-            Verb.Get,
-            (id) => `/${TEST_CONTROLLER}/${id}`,
+        get(
+            (id) => `/${TEST}/${id}`,
             (id) => ({ id })
         ).use(async ({ data }) => {
             const { params, session } = data;
@@ -27,9 +23,8 @@ export const TestController: CreateController = (create) => {
             return { user, id };
         }),
 
-        create(
-            Verb.Get,
-            (id) => `/${TEST_CONTROLLER}/edit/${id}`,
+        get(
+            (id) => `/${TEST}/edit/${id}`,
             (id) => ({ id })
         ).use(async ({ data }, { id }) => {
             const { session } = data;

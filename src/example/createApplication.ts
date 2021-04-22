@@ -40,4 +40,4 @@ export function createApplication() {
 
 export type ApplicationContext = HandlerContext<ReturnType<typeof createApplication>['handler']>;
 
-export interface CreateController extends CreateRoutes<ApplicationContext> {}
+export interface Controller extends CreateRoutes<ApplicationContext> {}

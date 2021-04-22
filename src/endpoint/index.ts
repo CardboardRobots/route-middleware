@@ -1,3 +1,3 @@
 export * from './Endpoint';
-// export * as Create from './createEndpoint';
+export * as CreateEndpoint from './CreateEndpoint';
 export * from './CreateRoutes';

@@ -1,1 +1,2 @@
-export * from './route-endpoint';
+export * from './endpoint';
+export * from './RouteMiddleware';
