@@ -14,6 +14,7 @@ export const addRoute: AddRoute = (create) => {
             const { user } = session;
             return { user };
         }),
+
         create(
             Verb.Get,
             (id) => `/${TEST_CONTROLLER}/${id}`,
@@ -24,15 +25,15 @@ export const addRoute: AddRoute = (create) => {
             const { id } = params;
             return { user, id };
         }),
+
         create(
             Verb.Get,
             (id) => `/${TEST_CONTROLLER}/edit/${id}`,
             (id) => ({ id })
-        ).use(async ({ data }, { name }) => {
-            // TODO: Fix value params
+        ).use(async ({ data }, { id }) => {
             const { session } = data;
             const { user } = session;
-            return { user, name };
+            return { user, id };
         }),
     ];
 };

@@ -9,7 +9,7 @@ export class Endpoint<
     ROUTE extends Route<any, any>,
     PARAMSCONTEXT extends CONTEXT & Context<{ params: RouteReturn<ROUTE> }>,
     NEXTCONTEXT extends PARAMSCONTEXT,
-    RESULT
+    RESULT = RouteReturn<ROUTE>
 > {
     methods: Verb[];
     route: ROUTE;
