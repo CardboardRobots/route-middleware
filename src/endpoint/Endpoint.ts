@@ -1,6 +1,8 @@
 import { Middleware, MiddlewareContext, MiddlewareReturn, Pipeline } from '@cardboardrobots/pipeline';
 import { Route } from '@cardboardrobots/route';
-import { Context, Verb } from 'sierra';
+import { Context } from 'sierra';
+
+import { Verb } from '../verb';
 
 type RouteReturn<T> = T extends Route<any, infer U> ? ReturnType<U> : never;
 

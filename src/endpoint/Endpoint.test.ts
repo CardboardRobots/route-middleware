@@ -1,5 +1,6 @@
 import { Route } from '@cardboardrobots/route';
-import { Verb } from 'sierra';
+
+import { Verb } from '../verb';
 
 import { Endpoint } from './Endpoint';
 

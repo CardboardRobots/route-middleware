@@ -1,5 +1,7 @@
 import { ParseFunction, Route, RouteFunction } from '@cardboardrobots/route';
-import { Context, Verb } from 'sierra';
+import { Context } from 'sierra';
+
+import { Verb } from '../verb';
 
 import { Endpoint } from './Endpoint';
 
